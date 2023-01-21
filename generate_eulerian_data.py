@@ -119,6 +119,7 @@ def holdout_split(data: np.ndarray) -> tuple[list, list, list]:
 
 
 def main(output_dir: str, num_candidates: int, max_vertices: int) -> None:
+    os.makedirs(output_dir, exist_ok=False)
     split_names = ['train', 'validation', 'test']
 
     graphs = generate_graphs(num_candidates,
@@ -128,29 +129,19 @@ def main(output_dir: str, num_candidates: int, max_vertices: int) -> None:
     split_data = holdout_split(np.array(graphs))
 
     for split, graphs in zip(split_names, split_data):
-        out_path = os.path.join(output_dir, split)
+        output_path = os.path.join(output_dir, f'{split}.tfrecord')
         num_graphs = len(graphs)
-
-        eul_path = os.path.join(out_path, 'eulerian')
-        non_eul_path = os.path.join(out_path, 'non_eulerian')
-
-        os.makedirs(eul_path, exist_ok=False)
-        os.makedirs(non_eul_path, exist_ok=False)
 
         progress_bar = ProgressBar(f'Exporting graph: %current%/%target% '
                                    f'(%progress%) on split {split.title()}',
                                    target=num_graphs)
 
-        for idx, graph in enumerate(graphs, 1):
-            progress_bar.update(idx)
+        with tf.io.TFRecordWriter(output_path) as writer:
+            for idx, graph in enumerate(graphs, 1):
+                progress_bar.update(idx)
 
-            graph_dir = eul_path if graph.is_eulerian() else non_eul_path
-            graph_num = len(os.listdir(graph_dir))
-            graph_path = os.path.join(graph_dir, f'{graph_num}.tfrecord')
+                graph_tensor = graph_to_tensor(graph)
 
-            graph_tensor = graph_to_tensor(graph)
-
-            with tf.io.TFRecordWriter(graph_path) as writer:
                 example = tfgnn.write_example(graph_tensor)
                 writer.write(example.SerializeToString())
 
