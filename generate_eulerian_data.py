@@ -61,11 +61,8 @@ def generate_graphs(num_candidates: int,
 
 def graph_to_tensor(graph: UndirectedGraph) -> tfgnn.GraphTensor:
     """Convert an undirected graph into a tfgnn.GraphTensor."""
-    num_nodes = tf.constant([len(graph.nodes)], dtype=tf.int32)
-    num_edges = tf.constant([len(graph.edges)], dtype=tf.int32)
-
     degrees = [graph.degree(node) for node in graph.nodes]
-    degrees = tf.constant(degrees, dtype=tf.int32)
+    degrees = tf.constant(degrees, dtype=tf.int64)
     degrees = tf.reshape(degrees, (len(degrees), 1))
 
     source_nodes, target_nodes = [], []
@@ -75,24 +72,34 @@ def graph_to_tensor(graph: UndirectedGraph) -> tfgnn.GraphTensor:
     source_nodes = tf.constant(source_nodes, dtype=tf.int32)
     target_nodes = tf.constant(target_nodes, dtype=tf.int32)
 
+    num_nodes = tf.shape(graph.nodes)
+    num_edges = tf.shape(source_nodes)
+
+    is_eulerian = tf.constant([graph.is_eulerian()], dtype=tf.int64)
+
     graph_tensor = tfgnn.GraphTensor.from_pieces(
         node_sets={
-            'Node': tfgnn.NodeSet.from_fields(
+            'node': tfgnn.NodeSet.from_fields(
                 sizes=num_nodes,
                 features={
-                    'Degree': degrees
+                    'degree': degrees
                 }
             )
         },
         edge_sets={
-            'Connection': tfgnn.EdgeSet.from_fields(
+            'edge': tfgnn.EdgeSet.from_fields(
                 sizes=num_edges,
                 adjacency=tfgnn.Adjacency.from_indices(
-                    source=('Node', source_nodes),
-                    target=('Node', target_nodes)
+                    source=('node', source_nodes),
+                    target=('node', target_nodes)
                 )
             )
-        }
+        },
+        context=tfgnn.Context.from_fields(
+            features={
+                'is_eulerian': is_eulerian
+            }
+        )
     )
 
     return graph_tensor
