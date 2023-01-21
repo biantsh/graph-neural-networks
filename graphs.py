@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Iterable
 
 from exceptions import InvalidGraphException, InvalidNodeException
 
@@ -6,7 +7,7 @@ from exceptions import InvalidGraphException, InvalidNodeException
 class Graph:
     def __init__(self,
                  num_vertices: int,
-                 edges: list[tuple[int, int]] = None
+                 edges: Iterable[tuple[int, int]] = None
                  ) -> None:
         if num_vertices <= 0:
             raise InvalidGraphException(
@@ -21,14 +22,17 @@ class Graph:
             for node_from, node_to in edges:
                 self.add_edge(node_from, node_to)
 
-    def __str__(self):
-        if len(self._adj_list) == 0:
+    def __repr__(self):
+        if self.is_empty():
             return 'None'
 
         edge_list = (f'{node}: {neighbors}'
                      for node, neighbors in self._adj_list.items())
 
-        return f"[Graph: {[', '.join(edge_list)]}]"
+        return f"[Graph: [{', '.join(edge_list)}]]"
+
+    def is_empty(self):
+        return len(self._adj_list) == 0
 
     def add_edge(self, node_from: int, node_to: int) -> None:
         if node_from not in range(1, self._num_vertices + 1) or \
@@ -50,6 +54,9 @@ class Graph:
         return len(self._adj_list[node])
 
     def is_euclidean(self) -> bool:
+        if self.is_empty():
+            return False
+
         num_odd_nodes = 0
 
         for node in range(self._num_vertices):
@@ -62,7 +69,7 @@ class Graph:
 class UndirectedGraph(Graph):
     def __init__(self,
                  num_vertices: int,
-                 edges: list[tuple[int, int]] = None
+                 edges: Iterable[tuple[int, int]] = None
                  ) -> None:
         super().__init__(num_vertices, edges)
 
