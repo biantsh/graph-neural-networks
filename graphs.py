@@ -31,6 +31,21 @@ class Graph:
 
         return f"[Graph: [{', '.join(edge_list)}]]"
 
+    @property
+    def nodes(self) -> list[int]:
+        return [node for node in range(1, self._num_vertices)
+                if node in self._adj_list]
+
+    @property
+    def edges(self) -> list[tuple[int, int]]:
+        edges = []
+
+        for node_from, neighbors in self._adj_list.items():
+            for node_to in neighbors:
+                edges.append((node_from, node_to))
+
+        return edges
+
     def is_empty(self):
         return len(self._adj_list) == 0
 
@@ -53,7 +68,7 @@ class Graph:
 
         return len(self._adj_list[node])
 
-    def is_euclidean(self) -> bool:
+    def is_eulerian(self) -> bool:
         if self.is_empty():
             return False
 
