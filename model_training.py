@@ -157,7 +157,7 @@ def main(graph_schema_path: str,
     model = build_model(model_input_graph_spec)
 
     loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
-    metrics = [tf.keras.metrics.BinaryAccuracy(threshold=0.5)]
+    metrics = [tf.keras.metrics.BinaryAccuracy(threshold=0.)]
 
     model.compile(tf.keras.optimizers.Adam(),
                   loss=loss,
