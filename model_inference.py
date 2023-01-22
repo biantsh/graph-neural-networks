@@ -1,4 +1,4 @@
-"""Get predictions randomly generated graphs by a trained model.
+"""Get predictions on randomly generated graphs by a trained model.
 
 Example usage:
     python3 model_inference.py  \
