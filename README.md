@@ -24,4 +24,4 @@ A graph neural network was then trained on this dataset for 15 epochs, reaching 
 
 # Issues
 
-While evaluating the model, it becomes clear that there is a bias towards classifying graphs with a large number of vertices as non-Eulerian. This is most likely due to the fact that randomly generated graphs tend to be less likely to have Eulerian paths. The issue could potentially be solved by modifying the dataset generator to favor Eulerian graphs with a higher number of vertices.
+While evaluating the model, it becomes clear that there is a bias towards classifying graphs with a small number of vertices as Eulerian and vice-versa. This is most likely due to the fact that randomly generated graphs tend to be less likely to have Eulerian paths as the number of vertices increases. The issue could potentially be solved by modifying the dataset generator to favor Eulerian graphs with a higher number of vertices.
