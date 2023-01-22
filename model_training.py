@@ -2,6 +2,13 @@
 
 This code was borrowed and adapted from an official Tensorflow GNN example:
 https://github.com/tensorflow/gnn/blob/main/examples/notebooks/intro_mutag_example.ipynb
+
+Example usage:
+    python3 model_training.py  \
+      --dataset_dir data/eulerian_dataset/  \
+      --output_dir trained_model/  \
+      --batch_size 32
+      --num_epochs 15
 """
 
 import argparse
@@ -184,7 +191,7 @@ if __name__ == '__main__':
     parser.add_argument('--graph_schema_path', type=str,
                         default='data/graph_schema.pbtxt')
     parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--num_epochs', type=int, default=100)
+    parser.add_argument('--num_epochs', type=int, default=15)
 
     args = parser.parse_args()
     main(args.graph_schema_path,
