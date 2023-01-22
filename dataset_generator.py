@@ -6,7 +6,7 @@ into Eulerian and non-Eulerian graphs.
 Example usage:
     python3 dataset_generator.py  \
       --output_dir generated_dataset/  \
-      --num_candidates 10000  \
+      --num_graphs 10000  \
       --max_vertices 50
 """
 
@@ -46,11 +46,11 @@ def random_graph(max_vertices: int,
     return graph
 
 
-def generate_graphs(num_candidates: int,
+def generate_graphs(num_graphs: int,
                     max_vertices: int,
                     keep_probability: float = 0.1
                     ) -> list[UndirectedGraph]:
-    """Generate `num_candidates` number of random graphs.
+    """Generate a `num_graphs` number of random graphs.
 
     Because random graphs are more likely to not be Eulerian, a
     `keep_probability` argument is provided which represents the probability
@@ -59,9 +59,9 @@ def generate_graphs(num_candidates: int,
     graphs = []
 
     progress_bar = ProgressBar('Generating graph: %current%/%target% '
-                               '(%progress%)', target=num_candidates)
+                               '(%progress%)', target=num_graphs)
 
-    for idx in range(1, num_candidates + 1):
+    for idx in range(1, num_graphs + 1):
         progress_bar.update(idx)
 
         graph = random_graph(max_vertices, keep_probability)
@@ -131,11 +131,11 @@ def holdout_split(data: np.ndarray) -> tuple[list, list, list]:
     return train, validation, test
 
 
-def main(output_dir: str, num_candidates: int, max_vertices: int) -> None:
+def main(output_dir: str, num_graphs: int, max_vertices: int) -> None:
     os.makedirs(output_dir, exist_ok=False)
     split_names = ['train', 'validation', 'test']
 
-    graphs = generate_graphs(num_candidates,
+    graphs = generate_graphs(num_graphs,
                              max_vertices,
                              keep_probability=0.1)
 
@@ -164,8 +164,8 @@ def main(output_dir: str, num_candidates: int, max_vertices: int) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--output_dir', type=str)
-    parser.add_argument('--num_candidates', type=int, default=10000)
+    parser.add_argument('--num_graphs', type=int, default=10000)
     parser.add_argument('--max_vertices', type=int, default=50)
 
     args = parser.parse_args()
-    main(args.output_dir, args.num_candidates, args.max_vertices)
+    main(args.output_dir, args.num_graphs, args.max_vertices)
