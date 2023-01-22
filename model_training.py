@@ -183,8 +183,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--graph_schema_path', type=str,
                         default='data/graph_schema.pbtxt')
-    parser.add_argument('--batch_size', default=32)
-    parser.add_argument('--num_epochs', default=100)
+    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--num_epochs', type=int, default=100)
 
     args = parser.parse_args()
     main(args.graph_schema_path,
