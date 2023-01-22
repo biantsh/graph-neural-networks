@@ -1,0 +1,33 @@
+node_sets {
+  key: "node"
+  value {
+    description: "A simple node in an undirected graph."
+    features {
+      key: "degree"
+      value: {
+        description: "The degree of a given node."
+        dtype: DT_INT64
+        shape { dim { size: 1 } }
+      }
+    }
+  }
+}
+
+edge_sets {
+  key: "edge"
+  value {
+    description: "A simple edge/connection between two nodes."
+    source: "node"
+    target: "node"
+  }
+}
+
+context {
+  features {
+    key: "is_eulerian"
+    value: {
+      description: "Defines whether or not a graph has a Eulearian path."
+      dtype: DT_INT64
+    }
+  }
+}
