@@ -10,7 +10,7 @@ After cloning this repostiory, you can install the requirements by running `pip 
 
 - `dataset_generator.py` to randomly generate a dataset of undirected graphs labeled as having a Eulerian path or not.  
 - `model_training.py` to train a graph neural network on the generated dataset.  
-- `model_inference.py` to test a trained model on more randomly graphs.  
+- `model_inference.py` to test a trained model on more randomly generated graphs.  
 
 # Approach
 
