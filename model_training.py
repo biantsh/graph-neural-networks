@@ -1,6 +1,6 @@
 """Create and train a Graph Neural Network for binary node classification.
 
-This code was borrowed adapted from an official Tensorflow GNN example:
+This code was borrowed and adapted from an official Tensorflow GNN example:
 https://github.com/tensorflow/gnn/blob/main/examples/notebooks/intro_mutag_example.ipynb
 """
 
