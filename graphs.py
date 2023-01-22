@@ -78,7 +78,7 @@ class Graph:
         return list(self._adj_list[node])
 
     def breadth_first_search(self, start_node: int) -> list[int]:
-        """Perform a breadh-first search and return of all visited nodes."""
+        """Perform a BFS and return a list of all visited nodes."""
         if start_node not in range(1, self._num_vertices + 1):
             raise InvalidNodeException(
                 f'start_node must be a valid node for the graph,'
