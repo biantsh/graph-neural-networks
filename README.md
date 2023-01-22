@@ -6,7 +6,7 @@ A project exploring the representation of graphs, and using them to train Graph 
 
 `python_version < 3.10`
 
-After cloning this repostiory, you can install the requirements by running `pip install -r requirements.txt` (assuming you have Python installed) and run the following scripts:
+After cloning this repostiory, you can install the requirements by running `pip install -r requirements.txt` (assuming you have Python and pip installed) and run the following scripts:
 
 - `dataset_generator.py` to randomly generate a dataset of undirected graphs labeled as having a Eulerian path or not.  
 - `model_training.py` to train a graph neural network on the generated dataset.  
