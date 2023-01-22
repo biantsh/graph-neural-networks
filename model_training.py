@@ -116,7 +116,7 @@ def plot_accuracy(train_acc: Iterable[float],
     plt.title('Training and Validation Accuracy', fontsize=16)
 
     plt.xlabel('Epoch', fontsize=14)
-    plt.ylabel('Loss', fontsize=14)
+    plt.ylabel('Accuracy', fontsize=14)
 
     plt.plot(train_acc, label='Training accuracy', color='#ff7f0e')
     plt.plot(val_acc, label='Validation accuracy', color='#1f77b4')
