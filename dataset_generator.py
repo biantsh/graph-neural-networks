@@ -4,7 +4,7 @@ The graphs are split into train, validation and test sets, and additionally
 into Eulerian and non-Eulerian graphs.
 
 Example usage:
-    python3 generate_eulerian_data.py  \
+    python3 dataset_generator.py  \
       --output_dir generated_dataset/  \
       --num_candidates 10000  \
       --max_vertices 50
