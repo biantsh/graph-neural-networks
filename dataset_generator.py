@@ -23,9 +23,32 @@ from graphs import UndirectedGraph
 from utils.progress_bar import ProgressBar
 
 
+def random_graph(max_vertices: int,
+                 keep_probability: float = 0.1
+                 ) -> UndirectedGraph:
+    num_vertices = random.randint(1, max_vertices)
+    num_edges = int(random.gauss(mu=3 * num_vertices, sigma=num_vertices))
+    num_edges = max(num_edges, 0)
+
+    random_node = partial(random.randint, 1, num_vertices)
+    edges = [(random_node(), random_node()) for _ in range(num_edges)]
+
+    graph = UndirectedGraph(num_vertices, edges)
+
+    # Only include fully connected graphs in training data.
+    if not graph.is_connected():
+        return random_graph(max_vertices)
+
+    # Balance dataset by removing some non-Eulerian graphs.
+    if not graph.is_eulerian() and random.uniform(0, 1) > keep_probability:
+        return random_graph(max_vertices)
+
+    return graph
+
+
 def generate_graphs(num_candidates: int,
                     max_vertices: int,
-                    keep_probability: float = 1
+                    keep_probability: float = 0.1
                     ) -> list[UndirectedGraph]:
     """Generate `num_candidates` number of random graphs.
 
@@ -41,23 +64,7 @@ def generate_graphs(num_candidates: int,
     for idx in range(1, num_candidates + 1):
         progress_bar.update(idx)
 
-        num_vertices = random.randint(1, max_vertices)
-        num_edges = int(random.gauss(mu=3*num_vertices, sigma=num_vertices))
-        num_edges = max(num_edges, 0)
-
-        random_node = partial(random.randint, 1, num_vertices)
-        edges = [(random_node(), random_node()) for _ in range(num_edges)]
-
-        graph = UndirectedGraph(num_vertices, edges)
-
-        # Only include fully connected graphs in training data.
-        if not graph.is_connected():
-            continue
-
-        # Balance dataset by removing some non-Eulerian graphs.
-        if not graph.is_eulerian() and random.uniform(0, 1) > keep_probability:
-            continue
-
+        graph = random_graph(max_vertices, keep_probability)
         graphs.append(graph)
 
     progress_bar.close()
