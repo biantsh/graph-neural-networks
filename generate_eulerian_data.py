@@ -49,6 +49,12 @@ def generate_graphs(num_candidates: int,
         edges = [(random_node(), random_node()) for _ in range(num_edges)]
 
         graph = UndirectedGraph(num_vertices, edges)
+
+        # Only include fully connected graphs in training data.
+        if not graph.is_connected():
+            continue
+
+        # Balance dataset by removing some non-Eulerian graphs.
         if not graph.is_eulerian() and random.uniform(0, 1) > keep_probability:
             continue
 

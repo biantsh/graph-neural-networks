@@ -33,7 +33,7 @@ class Graph:
 
     @property
     def nodes(self) -> list[int]:
-        return [node for node in range(1, self._num_vertices)
+        return [node for node in range(1, self._num_vertices + 1)
                 if node in self._adj_list]
 
     @property
@@ -60,7 +60,7 @@ class Graph:
         self._adj_list[node_from].add(node_to)
 
     def degree(self, node: int) -> int:
-        if node not in range(self._num_vertices):
+        if node not in range(1, self._num_vertices + 1):
             raise InvalidNodeException(
                 f'node must be a valid node for the graph,'
                 f' got {node} instead.'
@@ -68,13 +68,52 @@ class Graph:
 
         return len(self._adj_list[node])
 
+    def neighbors(self, node: int) -> list[int]:
+        if node not in range(1, self._num_vertices + 1):
+            raise InvalidNodeException(
+                f'node must be a valid node for the graph,'
+                f' got {node} instead.'
+            )
+
+        return list(self._adj_list[node])
+
+    def breadth_first_search(self, start_node: int) -> list[int]:
+        """Perform a breadh-first search and return of all visited nodes."""
+        if start_node not in range(1, self._num_vertices + 1):
+            raise InvalidNodeException(
+                f'start_node must be a valid node for the graph,'
+                f' got {start_node} instead.'
+            )
+
+        visited = []
+        stack = [start_node]
+
+        while len(stack) > 0:
+            node = stack.pop()
+
+            if node not in visited:
+                visited.append(node)
+                stack.extend(self.neighbors(node))
+
+        return visited
+
+    def is_connected(self) -> bool:
+        """Determines whether the graph is strongly connected."""
+        if len(self.nodes) == 0:
+            return False
+
+        visited = self.breadth_first_search(self.nodes[0])
+
+        return len(visited) == len(self.nodes)
+
     def is_eulerian(self) -> bool:
+        """Determines whether the graph contains a Eulerian path."""
         if self.is_empty():
             return False
 
         num_odd_nodes = 0
 
-        for node in range(self._num_vertices):
+        for node in range(1, self._num_vertices + 1):
             if self.degree(node) % 2 == 1:
                 num_odd_nodes += 1
 
