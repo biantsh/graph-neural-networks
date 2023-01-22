@@ -37,11 +37,11 @@ def random_graph(max_vertices: int,
 
     # Only include fully connected graphs in training data.
     if not graph.is_connected():
-        return random_graph(max_vertices)
+        return random_graph(max_vertices, keep_probability)
 
     # Balance dataset by removing some non-Eulerian graphs.
     if not graph.is_eulerian() and random.uniform(0, 1) > keep_probability:
-        return random_graph(max_vertices)
+        return random_graph(max_vertices, keep_probability)
 
     return graph
 
