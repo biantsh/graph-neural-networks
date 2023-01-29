@@ -66,6 +66,9 @@ class Graph:
                 f' got {node} instead.'
             )
 
+        if node in self._adj_list[node]:  # Self-loop
+            return len(self._adj_list[node]) + 1
+
         return len(self._adj_list[node])
 
     def neighbors(self, node: int) -> list[int]:
